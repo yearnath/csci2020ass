@@ -5,11 +5,11 @@ public class DataSource {
     public static ObservableList<SpamHam> getAllSpamHams() {
         ObservableList<SpamHam> spamHams = FXCollections.observableArrayList();
 
-        spamHams.add(new SpamHam("Hell yeah", 3, "as"));
-        spamHams.add(new SpamHam("bitch", 1, "hell"));
-        spamHams.add(new SpamHam("this", 4, " "));
-        spamHams.add(new SpamHam("go", 1, " "));
-        spamHams.add(new SpamHam("hard", 5, "FLOCKA"));
+        spamHams.add(new SpamHam("Testing", 1, "Status"));
+        spamHams.add(new SpamHam("Testing1", 2, "Status1"));
+        spamHams.add(new SpamHam("Testing2", 3, "Status2"));
+        spamHams.add(new SpamHam("Testing3", 4, "Status3"));
+        spamHams.add(new SpamHam("Testing4", 5, "Status4"));
 
         return spamHams;
     }
