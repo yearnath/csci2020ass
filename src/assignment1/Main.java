@@ -26,8 +26,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle("Assignment 1");
 
+        //creates a tableView for the upper 3/4 of the application
         table = new TableView<>();
-        File file1 = new File("spam"); File file2 = new File("ham"); File file3 = new File("ham2");
+
+        //chooses reference files for spam/ham training and organizes their words into maps
+        File file1 = new File("data/train/spam"); File file2 = new File("data/train/ham"); File file3 = new File("data/train/ham2");
         Map<String, Integer> spamFreq = (assignment1.DataSource.getAllSpamHam(file1));
         Map<String, Integer> hamFreq = (assignment1.DataSource.getAllSpamHam(file2));
         hamFreq.putAll(assignment1.DataSource.getAllSpamHam(file3));
