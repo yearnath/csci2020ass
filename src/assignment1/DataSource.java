@@ -1,22 +1,19 @@
 package assignment1;
+import javafx.beans.InvalidationListener;
 import javafx.collections.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class DataSource {
-    public static Map<String, Integer> getAllSpamHam(File file) throws IOException{
-        Map<String, Integer> spamHam = new HashMap<String, Integer>();
+    public static void getAllSpamHam(File file, Map<String, Integer> spamHam) throws IOException{
         Map<String, Integer> current = new HashMap<String, Integer>();
         if (file.isDirectory()) {
             // process all of the files recursively
             File[] filesInDir = file.listFiles();
             for (int i = 0; i < filesInDir.length; i++) {
-                spamHam.putAll(getAllSpamHam(filesInDir[i]));
+                getAllSpamHam(filesInDir[i], spamHam);
             }
         } else if (file.exists()) {
             // load all of the data, and process it into words
@@ -32,7 +29,7 @@ public class DataSource {
                         spamHam.put(word,1);
                         current.put(word,1);
                     }
-                    else if (spamHam.containsKey(word) && current.containsKey(word))
+                    else if (spamHam.containsKey(word) && !current.containsKey(word))
                     {
                         spamHam.put(word,spamHam.get(word)+1);
                         current.put(word,1);
@@ -40,9 +37,36 @@ public class DataSource {
                 }
             }
         }
-        return spamHam;
     }
 
+    public static ObservableList<SpamHam> test(File file, Map<String, Double> spamChance, String aClass) throws IOException
+    {
+        ObservableList<SpamHam> spamHams = FXCollections.observableArrayList();
+        if (file.isDirectory()) {
+            // process all of the files recursively
+            File[] filesInDir = file.listFiles();
+            for (int i = 0; i < filesInDir.length; i++) {
+                spamHams.addAll(test(filesInDir[i], spamChance, aClass));
+            }
+        } else if (file.exists()) {
+            // load all of the data, and process it into words
+            Scanner scanner = new Scanner(file);
+
+            //for each word in a given file, checks if the word is in the current and spamHam
+            //if the word is in the current file and spam
+            double n = 0;
+            while (scanner.hasNext()) {
+                String word = (scanner.next()).toLowerCase();
+                if (isWord(word)) {
+                    n += (Math.log(1 - spamChance.getOrDefault(word,0.0) - Math.log(spamChance.getOrDefault(word,0.0))));
+                }
+            }
+            double prob = (1/(1 + Math.pow(Math.E,n)));
+            SpamHam sh = new SpamHam(file.getName(), prob, aClass);
+            spamHams.add(sh);
+        }
+        return spamHams;
+    }
 
     //determines if given string is a word
     private static boolean isWord(String str){
