@@ -12,7 +12,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import javax.activation.DataSource;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,13 +28,14 @@ public class Main extends Application {
         //creates a tableView for the upper 3/4 of the application
         table = new TableView<>();
 
-        //chooses reference files for spam/ham training and organizes their words into maps
+        //chooses reference files for spam/ham training and organizes them into maps
         File file1 = new File("data/train/spam"); File file2 = new File("data/train/ham"); File file3 = new File("data/train/ham2");
         Map<String, Integer> spamFreq = (assignment1.DataSource.getAllSpamHam(file1));
         Map<String, Integer> hamFreq = (assignment1.DataSource.getAllSpamHam(file2));
         hamFreq.putAll(assignment1.DataSource.getAllSpamHam(file3));
 
-        Map<String, Double> SpamChance = spamChance(hamFreq, spamFreq);
+        //initializes SpamChance map
+        Map<String, Double> SpamChance = createSpamChanceMap(hamFreq, spamFreq);
 
         TableColumn<SpamHam, String> nameColumn = null;
         nameColumn = new TableColumn<>("File");
@@ -91,24 +91,26 @@ public class Main extends Application {
         launch(args);
     }
 
-    Map<String, Double> spamChance(Map<String, Integer> HamFreq, Map<String, Integer> SpamFreq)
+    //creates SpamChance map
+    Map<String, Double> createSpamChanceMap(Map<String, Integer> HamFreq, Map<String, Integer> SpamFreq)
     {
-        Map<String, Double> SpamChance = new HashMap<>();
+        Map<String, Double> spamChance = new HashMap<>();
         Set<String> words1 = HamFreq.keySet();
         String[] words = words1.toArray(new String[words1.size()]);
         for (int i = 0; i < words.length; i++)
         {
-            SpamChance.put(words[i],(SpamFreq.getOrDefault(words[i],0)/
+            spamChance.put(words[i],(SpamFreq.getOrDefault(words[i],0)/
                                     (HamFreq.getOrDefault(words[i],0)*1.0+SpamFreq.getOrDefault(words[i],0))));
         }
         Set<String> words2 = SpamFreq.keySet();
         words = words1.toArray(new String[words1.size()]);
         for (int i = 0; i < words.length; i++)
         {
-            SpamChance.putIfAbsent(words[i],(SpamFreq.getOrDefault(words[i],0)/
+            spamChance.putIfAbsent(words[i],(SpamFreq.getOrDefault(words[i],0)/
                                             (HamFreq.getOrDefault(words[i],0)*1.0+SpamFreq.getOrDefault(words[i],0))));
         }
-        return SpamChance;
+        System.out.println(spamChance);
+        return spamChance;
     }
 }
 

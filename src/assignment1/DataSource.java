@@ -21,15 +21,18 @@ public class DataSource {
         } else if (file.exists()) {
             // load all of the data, and process it into words
             Scanner scanner = new Scanner(file);
+
+            //for each word in a given file, checks if the word is in the current and spamHam
+            //if the word is in the current file and spam
             while (scanner.hasNext()) {
-                String word = scanner.next();
+                String word = (scanner.next()).toLowerCase();
                 if (isWord(word)) {
                     if (!spamHam.containsKey(word) && !current.containsKey(word))
                     {
                         spamHam.put(word,1);
                         current.put(word,1);
                     }
-                    else if (spamHam.containsKey(word) && !current.containsKey(word))
+                    else if (spamHam.containsKey(word) && current.containsKey(word))
                     {
                         spamHam.put(word,spamHam.get(word)+1);
                         current.put(word,1);
@@ -40,8 +43,10 @@ public class DataSource {
         return spamHam;
     }
 
+
+    //determines if given string is a word
     private static boolean isWord(String str){
-        String pattern = "^[a-zA-Z]*$";
+        String pattern = "^[a-z]*$";
         if (str.matches(pattern)){
             return true;
         }
