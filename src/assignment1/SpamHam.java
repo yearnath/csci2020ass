@@ -10,6 +10,7 @@ public class SpamHam {
         this.filename = filename;
         this.spamProbability = spamProbability;
         this.actualClass = actualClass;
+        //System.out.println(filename + " : " + getSpamProbRounded() + " : " + getSpamProbability());
     }
 
     public String getFilename() { return this.filename; }

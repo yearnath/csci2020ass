@@ -28,18 +28,28 @@ public class Main extends Application {
         //creates a tableView for the upper 3/4 of the application
         table = new TableView<>();
 
-        //chooses reference files for spam/ham training and organizes them into maps
+        //chooses reference files for spam/ham training
         File file1 = new File("data/train/spam"); File file2 = new File("data/train/ham"); File file3 = new File("data/train/ham2");
-        Map<String, Double> spamFreq = new HashMap<>();
-        assignment1.DataSource.getAllSpamHam(file1, spamFreq);
-        Map<String, Double> hamFreq = new HashMap<>();
-        assignment1.DataSource.getAllSpamHam(file2, hamFreq);
-        assignment1.DataSource.getAllSpamHam(file3, hamFreq); //add files from ham to ass well
+
+        //adds spam words to the trainSpamFreq map
+        Map<String, Double> trainSpamFreq = new HashMap<>();
+        assignment1.DataSource.getAllSpamHam(file1, trainSpamFreq);
+
+        //adds ham words to the trainHamFreq map
+        Map<String, Double> trainHamFreq = new HashMap<>();
+        assignment1.DataSource.getAllSpamHam(file2, trainHamFreq);
+        assignment1.DataSource.getAllSpamHam(file3, trainHamFreq); //add files from ham to ass well
 
         //initializes SpamChance map
+<<<<<<< HEAD
         Map<String, Double> spamChance = createSpamChanceMap(hamFreq, spamFreq);
         File testFile = new File("data/test/spam");
         table.setItems(assignment1.DataSource.test(testFile, spamChance, "Spam"));
+=======
+        Map<String, Double> spamChance = createSpamChanceMap(trainHamFreq, trainSpamFreq);
+        File testFile = new File("data/test/ham");
+        table.setItems(assignment1.DataSource.test(testFile, spamChance, "Ham"));
+>>>>>>> d812fdd88ccd3dfdd1a39bb2a2de7a1f852e442c
 
         TableColumn<SpamHam, String> nameColumn = null;
         nameColumn = new TableColumn<>("File");
