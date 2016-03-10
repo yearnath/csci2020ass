@@ -38,7 +38,7 @@ public class Main extends Application {
         //adds ham words to the trainHamFreq map
         Map<String, Double> trainHamFreq = new HashMap<>();
         assignment1.DataSource.getAllSpamHam(file2, trainHamFreq);
-        assignment1.DataSource.getAllSpamHam(file3, trainHamFreq); //add files from ham to ass well
+        //assignment1.DataSource.getAllSpamHam(file3, trainHamFreq); //add files from ham2 as well
 
         //initializes SpamChance map
 
