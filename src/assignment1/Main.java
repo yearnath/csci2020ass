@@ -39,9 +39,9 @@ public class Main extends Application {
 
         for(File temp : trainDir.listFiles()){
             if (temp.getName().substring(0,3).equals("ham"))
-                spamFiles.add(new File(temp.getPath()));
-            else if (temp.getName().substring(0,4).equals("spam"))
                 hamFiles.add(new File(temp.getPath()));
+            else if (temp.getName().substring(0,4).equals("spam"))
+                spamFiles.add(new File(temp.getPath()));
         }
 
         //creates a tableView for the upper 3/4 of the application
