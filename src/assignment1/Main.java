@@ -13,9 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Main extends Application {
     private BorderPane layout;
@@ -27,42 +25,50 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle("Assignment 1");
 
+        //Initializes the directoryChooser
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File("."));
         File mainDirectory = directoryChooser.showDialog(primaryStage);
-        File[] filesInDir = mainDirectory.listFiles();
+        //File[] filesInDir = mainDirectory.listFiles();
+        File trainDir = new File(mainDirectory.getName() + "/train");
+        File testDir = new File(mainDirectory.getName() + "/test");
 
-        int spamDirs = 0;
+        //counts number of spam directories
+        List<File> spamFiles = new ArrayList<File>();
+        List<File> hamFiles = new ArrayList<File>();
 
-        for (int i = 0; i < filesInDir.length; i++)
-            if (filesInDir[i].getName() == "train") {
-                File trainSpamDir = new File(filesInDir[i].getPath());
-                System.out.println(trainSpamDir.getPath());
-            }
+        for(File temp : trainDir.listFiles()){
+            if (temp.getName().substring(0,3).equals("ham"))
+                spamFiles.add(new File(temp.getPath()));
+            else if (temp.getName().substring(0,4).equals("spam"))
+                hamFiles.add(new File(temp.getPath()));
+        }
 
         //creates a tableView for the upper 3/4 of the application
         table = new TableView<>();
 
-        //chooses reference files for spam/ham training
-        File file1 = new File("data/train/spam"); File file2 = new File("data/train/ham"); File file3 = new File("data/train/ham2");
-
         //adds spam words to the trainSpamFreq map
         Map<String, Double> trainSpamFreq = new HashMap<>();
-        assignment1.DataSource.getAllSpamHam(file1, trainSpamFreq);
+
+        int numSpamFiles = 0;
+        for (File temp : spamFiles){
+            numSpamFiles++;
+            assignment1.DataSource.getAllSpamHam(temp, trainSpamFreq);
+        }
 
         //adds ham words to the trainHamFreq map
+        int numHamFiles = 0;
         Map<String, Double> trainHamFreq = new HashMap<>();
-        assignment1.DataSource.getAllSpamHam(file2, trainHamFreq);
-        assignment1.DataSource.getAllSpamHam(file3, trainHamFreq); //add files from ham2 as well
+        for (File temp : hamFiles){
+            numHamFiles++;
+            assignment1.DataSource.getAllSpamHam(temp, trainHamFreq);
+        }
 
-        //Number of files is
-        int numSpamFiles = file1.listFiles().length;
-        int numHamFiles = file2.listFiles().length + file3.listFiles().length;
         //divide map values by number of files
-        trainSpamFreq.replaceAll((k,v) -> v/numSpamFiles);
-        trainHamFreq.replaceAll((k,v) -> v/numHamFiles);
-        //initializes SpamChance map
+        trainSpamFreq.replaceAll((k,v) -> v/spamFiles.size());
+        trainHamFreq.replaceAll((k,v) -> v/hamFiles.size());
 
+        //initializes SpamChance map
         Map<String, Double> spamChance = createSpamChanceMap(trainHamFreq, trainSpamFreq);
         File testFile = new File("data/test/spam");
 
