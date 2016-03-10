@@ -26,12 +26,12 @@ public class SpamHam {
     public void setSpamProbability(double val) { this.spamProbability = val; }
     public void setActualClass(String value) { this.actualClass = value; }
 
-    public int getAcc(){
+    public boolean getAcc(){
         if (actualClass == "Spam" && spamProbability >= 0.5)
-            return 1;
+            return true;
         else if (actualClass == "Ham" && spamProbability <= 0.5)
-            return 1;
+            return true;
         else
-            return 0;
+            return false;
     }
 }
