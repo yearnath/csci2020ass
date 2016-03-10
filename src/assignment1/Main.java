@@ -54,7 +54,7 @@ public class Main extends Application {
         TableColumn<SpamHam, String> probabilityColumn = null;
         probabilityColumn = new TableColumn<>("Spam Probability");
         probabilityColumn.setMinWidth(200);
-        probabilityColumn.setCellValueFactory(new PropertyValueFactory<>("spamProbabilityRounded"));
+        probabilityColumn.setCellValueFactory(new PropertyValueFactory<>());
 
         table.getColumns().add(nameColumn);
         table.getColumns().add(classColumn);
