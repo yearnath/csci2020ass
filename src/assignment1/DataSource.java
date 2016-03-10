@@ -2,19 +2,22 @@ package assignment1;
 import javafx.beans.InvalidationListener;
 import javafx.collections.*;
 
+import javax.print.attribute.standard.MediaSize;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 public class DataSource {
-    public static void getAllSpamHam(File file, Map<String, Integer> spamHam) throws IOException{
-        Map<String, Integer> current = new HashMap<String, Integer>();
+    public static void getAllSpamHam(File file, Map<String, Double> spamHam) throws IOException{
+        Map<String, Double> current = new HashMap<>();
         if (file.isDirectory()) {
             // process all of the files recursively
             File[] filesInDir = file.listFiles();
+            double numFiles = filesInDir.length;
             for (int i = 0; i < filesInDir.length; i++) {
                 getAllSpamHam(filesInDir[i], spamHam);
             }
+            spamHam.replaceAll((k,v) -> v/numFiles);
         } else if (file.exists()) {
             // load all of the data, and process it into words
             Scanner scanner = new Scanner(file);
@@ -26,13 +29,13 @@ public class DataSource {
                 if (isWord(word)) {
                     if (!spamHam.containsKey(word) && !current.containsKey(word))
                     {
-                        spamHam.put(word,1);
-                        current.put(word,1);
+                        spamHam.put(word,1.0);
+                        current.put(word,1.0);
                     }
                     else if (spamHam.containsKey(word) && !current.containsKey(word))
                     {
-                        spamHam.put(word,spamHam.get(word)+1);
-                        current.put(word,1);
+                        spamHam.put(word,spamHam.get(word)+1.0);
+                        current.put(word,1.0);
                     }
                 }
             }
@@ -58,7 +61,7 @@ public class DataSource {
             while (scanner.hasNext()) {
                 String word = (scanner.next()).toLowerCase();
                 if (isWord(word)) {
-                    n += (Math.log(1 - spamChance.getOrDefault(word,0.0) - Math.log(spamChance.getOrDefault(word,0.0))));
+                    n += (Math.log(1.0 - spamChance.getOrDefault(word, 0.0)) - Math.log(spamChance.getOrDefault(word, 0.0)));
                 }
             }
             double prob = (1/(1 + Math.pow(Math.E,n)));

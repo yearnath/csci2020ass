@@ -30,9 +30,9 @@ public class Main extends Application {
 
         //chooses reference files for spam/ham training and organizes them into maps
         File file1 = new File("data/train/spam"); File file2 = new File("data/train/ham"); File file3 = new File("data/train/ham2");
-        Map<String, Integer> spamFreq = new HashMap<>();
+        Map<String, Double> spamFreq = new HashMap<>();
         assignment1.DataSource.getAllSpamHam(file1, spamFreq);
-        Map<String, Integer> hamFreq = new HashMap<>();
+        Map<String, Double> hamFreq = new HashMap<>();
         assignment1.DataSource.getAllSpamHam(file2, hamFreq);
         assignment1.DataSource.getAllSpamHam(file3, hamFreq); //add files from ham to ass well
 
@@ -97,22 +97,22 @@ public class Main extends Application {
     }
 
     //creates SpamChance map
-    private Map<String, Double> createSpamChanceMap(Map<String, Integer> HamFreq, Map<String, Integer> SpamFreq)
+    private Map<String, Double> createSpamChanceMap(Map<String, Double> HamFreq, Map<String, Double> SpamFreq)
     {
         Map<String, Double> spamChance = new HashMap<>();
         Set<String> words1 = HamFreq.keySet();
         String[] words = words1.toArray(new String[words1.size()]);
         for (int i = 0; i < words.length; i++)
         {
-            spamChance.put(words[i],(SpamFreq.getOrDefault(words[i],0)/
-                                    (HamFreq.getOrDefault(words[i],0)+SpamFreq.getOrDefault(words[i],0))*1.0)*1.0);
+            spamChance.put(words[i],(SpamFreq.getOrDefault(words[i],0.0)/
+                                    (HamFreq.getOrDefault(words[i],0.0)+SpamFreq.getOrDefault(words[i],0.0))));
         }
         Set<String> words2 = SpamFreq.keySet();
-        words = words1.toArray(new String[words1.size()]);
+        words = words2.toArray(new String[words2.size()]);
         for (int i = 0; i < words.length; i++)
         {
-            spamChance.putIfAbsent(words[i],(SpamFreq.getOrDefault(words[i],0)/
-                                            (HamFreq.getOrDefault(words[i],0)*1.0+SpamFreq.getOrDefault(words[i],0))));
+            spamChance.putIfAbsent(words[i],(SpamFreq.getOrDefault(words[i],0.0)/
+                                            (HamFreq.getOrDefault(words[i],0.0)+SpamFreq.getOrDefault(words[i],0.0))));
         }
         return spamChance;
     }
