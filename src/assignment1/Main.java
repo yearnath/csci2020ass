@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -26,6 +27,18 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle("Assignment 1");
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File("."));
+        File mainDirectory = directoryChooser.showDialog(primaryStage);
+        File[] filesInDir = mainDirectory.listFiles();
+
+        int spamDirs = 0;
+        for (int i = 0; i < filesInDir.length; i++)
+            if (filesInDir[i].getName() == "train") {
+                File trainSpamDir = new File(filesInDir[i].getPath());
+                System.out.println(trainSpamDir.getPath());
+            }
 
         //creates a tableView for the upper 3/4 of the application
         table = new TableView<>();
