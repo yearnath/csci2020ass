@@ -25,4 +25,13 @@ public class SpamHam {
     public void setFilename(String value) { this.filename = value; }
     public void setSpamProbability(double val) { this.spamProbability = val; }
     public void setActualClass(String value) { this.actualClass = value; }
+
+    public int getAcc(){
+        if (actualClass == "Spam" && spamProbability >= 0.5)
+            return 1;
+        else if (actualClass == "Ham" && spamProbability <= 0.5)
+            return 1;
+        else
+            return 0;
+    }
 }
