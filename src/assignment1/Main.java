@@ -1,18 +1,17 @@
 package assignment1;
 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -52,7 +51,9 @@ public class Main extends Application {
 
         Map<String, Double> spamChance = createSpamChanceMap(trainHamFreq, trainSpamFreq);
         File testFile = new File("data/test/spam");
-        table.setItems(assignment1.DataSource.test(testFile, spamChance, spamOrHam));
+
+        ObservableList<SpamHam> spamHams = assignment1.DataSource.test(testFile, spamChance, spamOrHam);
+        table.setItems(spamHams);
 
         TableColumn<SpamHam, String> nameColumn;
         nameColumn = new TableColumn<>("File");
@@ -81,15 +82,14 @@ public class Main extends Application {
         Label accLabel = new Label("Accuracy:");
         precisionArea.add(accLabel, 0, 0);
         TextField accField = new TextField();
+        accField.setText((getAccuracy(spamHams)));
         precisionArea.add(accField, 1, 0);
 
         Label precLabel = new Label("Precision:");
         precisionArea.add(precLabel, 0, 1);
         TextField precField = new TextField();
+        precField.setText((getPrecision(spamHams)));
         precisionArea.add(precField, 1, 1);
-
-        accField.setText("Unknown");
-        precField.setText("Unknown");
 
         accField.setEditable(false);
         precField.setEditable(false);
@@ -127,6 +127,54 @@ public class Main extends Application {
                                             (HamFreq.getOrDefault(words[i],0.0)+SpamFreq.get(words[i]))));
         }
         return spamChance;
+    }
+
+    private String getAccuracy(ObservableList<SpamHam> spamHams)
+    {
+        double acc = 0;
+        double total = 0;
+        double correct = 0;
+        for (SpamHam sh : spamHams){
+            if (sh.getAcc())
+            {
+                correct++;
+            }
+            total++;
+        }
+        acc = correct/total;
+        DecimalFormat df = new DecimalFormat("0.00000");
+        return df.format(acc);
+    }
+
+    private String getPrecision(ObservableList<SpamHam> spamHams)
+    {
+        double pre = 0;
+        double guessSpam = 0;
+        double guessHam = 0;
+        double correctSpam = 0;
+        double correctHam = 0;
+
+        for (SpamHam sh : spamHams){
+            if (sh.getSpamProbability() > 0.5)
+            {
+                guessSpam++;
+                if (sh.getActualClass().equals("Spam"))
+                {
+                    correctSpam++;
+                }
+            }
+            else
+            {
+                guessHam++;
+                if (sh.getActualClass().equals("Ham"))
+                {
+                    correctHam++;
+                }
+            }
+        }
+        pre = (correctSpam+correctHam)/(guessSpam+guessHam);
+        DecimalFormat df = new DecimalFormat("0.00000");
+        return df.format(pre);
     }
 }
 
