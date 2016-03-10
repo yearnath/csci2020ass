@@ -29,13 +29,27 @@ public class Main extends Application {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File("."));
         File mainDirectory = directoryChooser.showDialog(primaryStage);
-        //File[] filesInDir = mainDirectory.listFiles();
         File trainDir = new File(mainDirectory.getName() + "/train");
         File testDir = new File(mainDirectory.getName() + "/test");
 
         //counts number of spam directories
         List<File> spamFiles = new ArrayList<File>();
         List<File> hamFiles = new ArrayList<File>();
+
+
+
+
+
+
+
+        /*
+         * I'm 90% sure the problem is in this chunk of code right here
+         * I don't think I'm setting the directories for spam and ham correctly.
+         * When I tried to print temp.getPath() it shows the correct path
+         * But I think something is still wrong here...
+         */
+
+
 
         for(File temp : trainDir.listFiles()){
             if (temp.getName().substring(0,3).equals("ham"))
@@ -49,18 +63,14 @@ public class Main extends Application {
 
         //adds spam words to the trainSpamFreq map
         Map<String, Double> trainSpamFreq = new HashMap<>();
-
-        int numSpamFiles = 0;
         for (File temp : spamFiles){
-            numSpamFiles++;
+            System.out.println(temp.getPath());
             assignment1.DataSource.getAllSpamHam(temp, trainSpamFreq);
         }
 
         //adds ham words to the trainHamFreq map
-        int numHamFiles = 0;
         Map<String, Double> trainHamFreq = new HashMap<>();
         for (File temp : hamFiles){
-            numHamFiles++;
             assignment1.DataSource.getAllSpamHam(temp, trainHamFreq);
         }
 
