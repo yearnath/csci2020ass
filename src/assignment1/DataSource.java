@@ -59,7 +59,6 @@ public class DataSource {
             //for each word in a given file, checks if the word is in the current and spamHam
             //if the word is in the current file and spam
             double n = 0.0;
-            boolean found = false;
             while (scanner.hasNext()) {
                 String word = (scanner.next()).toLowerCase();
                 if (isWord(word)) {
