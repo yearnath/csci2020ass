@@ -41,15 +41,10 @@ public class Main extends Application {
         assignment1.DataSource.getAllSpamHam(file3, trainHamFreq); //add files from ham to ass well
 
         //initializes SpamChance map
-<<<<<<< HEAD
-        Map<String, Double> spamChance = createSpamChanceMap(hamFreq, spamFreq);
+
+        Map<String, Double> spamChance = createSpamChanceMap(trainHamFreq, trainSpamFreq);
         File testFile = new File("data/test/spam");
         table.setItems(assignment1.DataSource.test(testFile, spamChance, "Spam"));
-=======
-        Map<String, Double> spamChance = createSpamChanceMap(trainHamFreq, trainSpamFreq);
-        File testFile = new File("data/test/ham");
-        table.setItems(assignment1.DataSource.test(testFile, spamChance, "Ham"));
->>>>>>> d812fdd88ccd3dfdd1a39bb2a2de7a1f852e442c
 
         TableColumn<SpamHam, String> nameColumn = null;
         nameColumn = new TableColumn<>("File");
