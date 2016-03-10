@@ -33,6 +33,7 @@ public class Main extends Application {
         File[] filesInDir = mainDirectory.listFiles();
 
         int spamDirs = 0;
+
         for (int i = 0; i < filesInDir.length; i++)
             if (filesInDir[i].getName() == "train") {
                 File trainSpamDir = new File(filesInDir[i].getPath());
