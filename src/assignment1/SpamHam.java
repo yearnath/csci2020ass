@@ -4,11 +4,13 @@ import java.text.DecimalFormat;
 public class SpamHam {
     private String filename;
     private double spamProbability;
+    private String spamProbabilityRounded;
     private String actualClass;
 
     public SpamHam(String filename, double spamProbability, String actualClass) {
         this.filename = filename;
         this.spamProbability = spamProbability;
+        this.spamProbabilityRounded = this.getSpamProbRounded();
         this.actualClass = actualClass;
     }
 

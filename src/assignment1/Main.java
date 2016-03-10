@@ -38,7 +38,6 @@ public class Main extends Application {
 
         //initializes SpamChance map
         Map<String, Double> spamChance = createSpamChanceMap(hamFreq, spamFreq);
-        System.out.println(spamChance);
         File testFile = new File("data/test/ham");
         table.setItems(assignment1.DataSource.test(testFile, spamChance, "Ham"));
 
@@ -52,10 +51,10 @@ public class Main extends Application {
         classColumn.setMinWidth(100);
         classColumn.setCellValueFactory(new PropertyValueFactory<>("actualClass"));
 
-        TableColumn<SpamHam, Double> probabilityColumn = null;
+        TableColumn<SpamHam, String> probabilityColumn = null;
         probabilityColumn = new TableColumn<>("Spam Probability");
         probabilityColumn.setMinWidth(200);
-        probabilityColumn.setCellValueFactory(new PropertyValueFactory<>("spamProbability"));
+        probabilityColumn.setCellValueFactory(new PropertyValueFactory<>("spamProbabilityRounded"));
 
         table.getColumns().add(nameColumn);
         table.getColumns().add(classColumn);

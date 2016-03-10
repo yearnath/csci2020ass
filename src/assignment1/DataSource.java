@@ -5,6 +5,7 @@ import javafx.collections.*;
 import javax.print.attribute.standard.MediaSize;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class DataSource {
@@ -57,14 +58,24 @@ public class DataSource {
 
             //for each word in a given file, checks if the word is in the current and spamHam
             //if the word is in the current file and spam
-            double n = 0;
+            double n = 0.0;
+            boolean found = false;
             while (scanner.hasNext()) {
                 String word = (scanner.next()).toLowerCase();
                 if (isWord(word)) {
-                    n += (Math.log(1.0 - spamChance.getOrDefault(word, 0.0)) - Math.log(spamChance.getOrDefault(word, 0.0)));
+                    double chance = spamChance.getOrDefault(word, 0.00001);
+                    //to avoid -infinity
+                    if (chance == 1) {
+                        chance = 0.99999;
+                    }
+                    //to avoid infinity
+                    else if (chance == 0) {
+                        chance = 0.00001;
+                    }
+                    n += Math.log(1.0 - chance) - Math.log(chance);
                 }
             }
-            double prob = (1/(1 + Math.pow(Math.E,n)));
+            double prob = (1.0/(1.0 + Math.pow(Math.E,n)));
             SpamHam sh = new SpamHam(file.getName(), prob, aClass);
             spamHams.add(sh);
         }
