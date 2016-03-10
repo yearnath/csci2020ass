@@ -38,12 +38,18 @@ public class Main extends Application {
         //adds ham words to the trainHamFreq map
         Map<String, Double> trainHamFreq = new HashMap<>();
         assignment1.DataSource.getAllSpamHam(file2, trainHamFreq);
-        //assignment1.DataSource.getAllSpamHam(file3, trainHamFreq); //add files from ham2 as well
+        assignment1.DataSource.getAllSpamHam(file3, trainHamFreq); //add files from ham2 as well
 
+        //Number of files is
+        int numSpamFiles = file1.listFiles().length;
+        int numHamFiles = file2.listFiles().length + file3.listFiles().length;
+        //divide map values by number of files
+        trainSpamFreq.replaceAll((k,v) -> v/numSpamFiles);
+        trainHamFreq.replaceAll((k,v) -> v/numHamFiles);
         //initializes SpamChance map
 
         Map<String, Double> spamChance = createSpamChanceMap(trainHamFreq, trainSpamFreq);
-        File testFile = new File("data/test/spam");
+        File testFile = new File("data/test/ham");
         table.setItems(assignment1.DataSource.test(testFile, spamChance, "Spam"));
 
         TableColumn<SpamHam, String> nameColumn = null;

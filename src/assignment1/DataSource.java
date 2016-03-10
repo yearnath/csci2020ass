@@ -14,11 +14,9 @@ public class DataSource {
         if (file.isDirectory()) {
             // process all of the files recursively
             File[] filesInDir = file.listFiles();
-            double numFiles = filesInDir.length;
             for (int i = 0; i < filesInDir.length; i++) {
                 getAllSpamHam(filesInDir[i], spamHam);
             }
-            spamHam.replaceAll((k,v) -> v/numFiles);
         } else if (file.exists()) {
             // load all of the data, and process it into words
             Scanner scanner = new Scanner(file);
