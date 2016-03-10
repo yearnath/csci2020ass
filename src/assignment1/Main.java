@@ -53,8 +53,8 @@ public class Main extends Application {
 
         TableColumn<SpamHam, String> probabilityColumn = null;
         probabilityColumn = new TableColumn<>("Spam Probability");
-        probabilityColumn.setMinWidth(200);
-        probabilityColumn.setCellValueFactory(new PropertyValueFactory<>());
+        probabilityColumn.setMinWidth(300);
+        probabilityColumn.setCellValueFactory(new PropertyValueFactory<>("spamProbability"));
 
         table.getColumns().add(nameColumn);
         table.getColumns().add(classColumn);
@@ -85,7 +85,7 @@ public class Main extends Application {
         layout.setCenter(table);
         layout.setBottom(precisionArea);
 
-        Scene scene = new Scene(layout, 800, 600);
+        Scene scene = new Scene(layout, 900, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
