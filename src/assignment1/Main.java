@@ -43,7 +43,7 @@ public class Main extends Application {
         File hamFile2 = new File(mainDirectory.getName() + "/train/ham2");
         assignment1.DataSource.getAllSpamHam(hamFile1, trainHamFreq);
         assignment1.DataSource.getAllSpamHam(hamFile2, trainHamFreq);
-        
+
         //divide map values by number of files
         trainSpamFreq.replaceAll((k,v) -> v/spamFile.length());
         trainHamFreq.replaceAll((k,v) -> v/(hamFile1.length() + hamFile2.length()));
