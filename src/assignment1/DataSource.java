@@ -58,10 +58,11 @@ public class DataSource {
             //if the word is in the current file and spam
             double n = 0.0;
             //a variable that increases accuracy by checking for run on spam
-            int checker = 0;
+            int Schecker = 0;
             while (scanner.hasNext()) {
                 String word = (scanner.next()).toLowerCase();
                 if (isWord(word)) {
+                    //uses default so there are no null values
                     double chance = spamChance.getOrDefault(word, 0.00001);
                     //to avoid -infinity
                     if (chance == 1) {
@@ -74,9 +75,16 @@ public class DataSource {
                     //word is probably in a spam email, add 1 to checker
                     if (chance > 0.5)
                     {
-                        checker++;
-                        //if checker is greater than 3 its a "spam statement" make chance 0.99999
-                        if (checker > 3)
+                        Schecker++;
+                        //if checker is greater than 5 its a spam sentence, add -11 (max spam value)
+                        //this essentially doubles the spam rating for this word
+                        if (Schecker > 5)
+                        {
+                            chance = 0.99999;
+                            n += -11;
+                        }
+                        //if checker is greater than 1 than its the start of a spam statement, increase spam rating
+                        else if (Schecker > 1)
                         {
                             chance = 0.99999;
                         }
@@ -84,7 +92,7 @@ public class DataSource {
                     //word probably isn't in a spam email, reduce checker to 0
                     else if (chance < 0.5)
                     {
-                        checker = 0;
+                        Schecker = 0;
                     }
                     n += Math.log(1.0 - chance) - Math.log(chance);
                 }
