@@ -1,11 +1,8 @@
 package assignment1;
-import javafx.beans.InvalidationListener;
 import javafx.collections.*;
 
-import javax.print.attribute.standard.MediaSize;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.*;
 
 public class DataSource {
@@ -14,15 +11,17 @@ public class DataSource {
         if (file.isDirectory()) {
             // process all of the files recursively
             File[] filesInDir = file.listFiles();
-            for (int i = 0; i < filesInDir.length; i++) {
-                getAllSpamHam(filesInDir[i], spamHam);
+            for (File temp : filesInDir) {
+                getAllSpamHam(temp, spamHam);
             }
         } else if (file.exists()) {
             // load all of the data, and process it into words
             Scanner scanner = new Scanner(file);
 
             //for each word in a given file, checks if the word is in the current and spamHam
-            //if the word is in the current file and spam
+            //if the word is in both, nothing happens
+            //if it's in neither, it's added to both
+            //if it's only not in current, the value for that key is +1 in the spamHam map
             while (scanner.hasNext()) {
                 String word = (scanner.next()).toLowerCase();
                 if (isWord(word)) {
@@ -54,8 +53,6 @@ public class DataSource {
             // load all of the data, and process it into words
             Scanner scanner = new Scanner(file);
 
-            //for each word in a given file, checks if the word is in the current and spamHam
-            //if the word is in the current file and spam
             double n = 0.0;
             //a variable that increases accuracy by checking for run on spam
             int Schecker = 0;
@@ -83,7 +80,8 @@ public class DataSource {
                             chance = 0.99999;
                             n += -11;
                         }
-                        //if checker is greater than 1 than its the start of a spam statement, increase spam rating
+                        //if checker is more than 1 greater than it is at the start of a spam statement,
+                        //increase spam rating
                         else if (Schecker > 1)
                         {
                             chance = 0.99999;

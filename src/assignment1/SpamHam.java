@@ -10,7 +10,6 @@ public class SpamHam {
         this.filename = filename;
         this.spamProbability = spamProbability;
         this.actualClass = actualClass;
-        //System.out.println(filename + " : " + getSpamProbRounded() + " : " + getSpamProbability());
     }
 
     public String getFilename() { return this.filename; }
@@ -27,9 +26,9 @@ public class SpamHam {
     public void setActualClass(String value) { this.actualClass = value; }
 
     public boolean getAcc(){
-        if (actualClass == "Spam" && spamProbability >= 0.5)
+        if (actualClass.equals("Spam") && spamProbability >= 0.5)
             return true;
-        else if (actualClass == "Ham" && spamProbability <= 0.5)
+        else if (actualClass.equals("Ham") && spamProbability < 0.5)
             return true;
         else
             return false;

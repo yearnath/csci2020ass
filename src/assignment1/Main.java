@@ -18,11 +18,10 @@ import java.util.*;
 public class Main extends Application {
     private BorderPane layout;
     private TableView<SpamHam> table;
-    private int accuracy = 0;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        primaryStage.setTitle("Assignment 1");
+        primaryStage.setTitle("Spam Master 3000");
 
         //Initializes the directoryChooser
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -33,11 +32,13 @@ public class Main extends Application {
         table = new TableView<>();
 
         //adds spam words to the trainSpamFreq map
+        //also sets the train/spam directory based on selected data dir
         Map<String, Double> trainSpamFreq = new HashMap<>();
         File spamFile = new File(mainDirectory.getName() + "/train/spam");
         assignment1.DataSource.getAllSpamHam(spamFile, trainSpamFreq);
 
         //adds ham words to the trainHamFreq map
+        //also sets the train/ham  or train/ham2 directory based on selected data dir
         Map<String, Double> trainHamFreq = new HashMap<>();
         File hamFile1 = new File(mainDirectory.getName() + "/train/ham");
         File hamFile2 = new File(mainDirectory.getName() + "/train/ham2");
