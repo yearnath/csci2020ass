@@ -18,7 +18,6 @@ import java.util.*;
 public class Main extends Application {
     private BorderPane layout;
     private TableView<SpamHam> table;
-    private String spamOrHam = "Spam";
     private int accuracy = 0;
 
     @Override
@@ -29,60 +28,37 @@ public class Main extends Application {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File("."));
         File mainDirectory = directoryChooser.showDialog(primaryStage);
-        File trainDir = new File(mainDirectory.getName() + "/train");
-        File testDir = new File(mainDirectory.getName() + "/test");
-
-        //counts number of spam directories
-        List<File> spamFiles = new ArrayList<File>();
-        List<File> hamFiles = new ArrayList<File>();
-
-
-
-
-
-
-
-        /*
-         * I'm 90% sure the problem is in this chunk of code right here
-         * I don't think I'm setting the directories for spam and ham correctly.
-         * When I tried to print temp.getPath() it shows the correct path
-         * But I think something is still wrong here...
-         */
-
-
-
-        for(File temp : trainDir.listFiles()){
-            if (temp.getName().substring(0,3).equals("ham"))
-                hamFiles.add(new File(temp.getPath()));
-            else if (temp.getName().substring(0,4).equals("spam"))
-                spamFiles.add(new File(temp.getPath()));
-        }
 
         //creates a tableView for the upper 3/4 of the application
         table = new TableView<>();
 
         //adds spam words to the trainSpamFreq map
         Map<String, Double> trainSpamFreq = new HashMap<>();
-        for (File temp : spamFiles){
-            System.out.println(temp.getPath());
-            assignment1.DataSource.getAllSpamHam(temp, trainSpamFreq);
-        }
+        File spamFile = new File(mainDirectory.getName() + "/train/spam");
+        System.out.println(spamFile.getName());
+        assignment1.DataSource.getAllSpamHam(spamFile, trainSpamFreq);
+        System.out.println(trainSpamFreq);
 
         //adds ham words to the trainHamFreq map
         Map<String, Double> trainHamFreq = new HashMap<>();
-        for (File temp : hamFiles){
-            assignment1.DataSource.getAllSpamHam(temp, trainHamFreq);
-        }
+        File hamFile1 = new File(mainDirectory.getName() + "/train/ham");
+        File hamFile2 = new File(mainDirectory.getName() + "/train/ham2");
+        assignment1.DataSource.getAllSpamHam(hamFile1, trainHamFreq);
+        assignment1.DataSource.getAllSpamHam(hamFile2, trainHamFreq);
+        System.out.println(trainHamFreq);
 
         //divide map values by number of files
-        trainSpamFreq.replaceAll((k,v) -> v/spamFiles.size());
-        trainHamFreq.replaceAll((k,v) -> v/hamFiles.size());
+        trainSpamFreq.replaceAll((k,v) -> v/spamFile.length());
+        trainHamFreq.replaceAll((k,v) -> v/(hamFile1.length() + hamFile2.length()));
 
         //initializes SpamChance map
         Map<String, Double> spamChance = createSpamChanceMap(trainHamFreq, trainSpamFreq);
-        File testFile = new File("data/test/spam");
 
-        ObservableList<SpamHam> spamHams = assignment1.DataSource.test(testFile, spamChance, spamOrHam);
+        //add test emails to table
+        File testFile = new File(mainDirectory.getName() + "/test/spam");
+        ObservableList<SpamHam> spamHams = assignment1.DataSource.test(testFile, spamChance, "Spam");
+        File testFile2 = new File(mainDirectory + "/test/ham");
+        spamHams.addAll(assignment1.DataSource.test(testFile2, spamChance, "Ham"));
         table.setItems(spamHams);
 
         TableColumn<SpamHam, String> nameColumn;
