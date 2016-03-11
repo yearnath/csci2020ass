@@ -35,9 +35,7 @@ public class Main extends Application {
         //adds spam words to the trainSpamFreq map
         Map<String, Double> trainSpamFreq = new HashMap<>();
         File spamFile = new File(mainDirectory.getName() + "/train/spam");
-        System.out.println(spamFile.getName());
         assignment1.DataSource.getAllSpamHam(spamFile, trainSpamFreq);
-        System.out.println(trainSpamFreq);
 
         //adds ham words to the trainHamFreq map
         Map<String, Double> trainHamFreq = new HashMap<>();
@@ -45,8 +43,7 @@ public class Main extends Application {
         File hamFile2 = new File(mainDirectory.getName() + "/train/ham2");
         assignment1.DataSource.getAllSpamHam(hamFile1, trainHamFreq);
         assignment1.DataSource.getAllSpamHam(hamFile2, trainHamFreq);
-        System.out.println(trainHamFreq);
-
+        
         //divide map values by number of files
         trainSpamFreq.replaceAll((k,v) -> v/spamFile.length());
         trainHamFreq.replaceAll((k,v) -> v/(hamFile1.length() + hamFile2.length()));
@@ -61,6 +58,7 @@ public class Main extends Application {
         spamHams.addAll(assignment1.DataSource.test(testFile2, spamChance, "Ham"));
         table.setItems(spamHams);
 
+        //setup columns
         TableColumn<SpamHam, String> nameColumn;
         nameColumn = new TableColumn<>("File");
         nameColumn.setMinWidth(500);
@@ -80,6 +78,7 @@ public class Main extends Application {
         table.getColumns().add(classColumn);
         table.getColumns().add(probabilityColumn);
 
+        //add gridpane area for accuracy and precision
         GridPane precisionArea = new GridPane();
         precisionArea.setPadding(new Insets(10, 10, 10, 10));
         precisionArea.setVgap(10);
@@ -120,6 +119,7 @@ public class Main extends Application {
         Map<String, Double> spamChance = new HashMap<>();
         Set<String> words1 = HamFreq.keySet();
         String[] words = words1.toArray(new String[words1.size()]);
+        //adds all words from SpamFreq to the map
         for (int i = 0; i < words.length; i++)
         {
             spamChance.put(words[i],(SpamFreq.getOrDefault(words[i],0.0)/
@@ -127,6 +127,7 @@ public class Main extends Application {
         }
         Set<String> words2 = SpamFreq.keySet();
         words = words2.toArray(new String[words2.size()]);
+        //adds all words not already in the map in HamFreq into it
         for (int i = 0; i < words.length; i++)
         {
             spamChance.putIfAbsent(words[i],(SpamFreq.get(words[i])/
@@ -135,6 +136,7 @@ public class Main extends Application {
         return spamChance;
     }
 
+    //calculates accuracy
     private String getAccuracy(ObservableList<SpamHam> spamHams)
     {
         double acc = 0;
@@ -152,6 +154,7 @@ public class Main extends Application {
         return df.format(acc);
     }
 
+    //calculates precision
     private String getPrecision(ObservableList<SpamHam> spamHams)
     {
         double pre = 0;
